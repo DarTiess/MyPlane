@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] float moveSpeed=50f;
     [SerializeField] Transform player;
     Vector3 startPosition;
+    Vector3 restartPosition;
     Vector3 endPosition;
     [SerializeField] float delay;
   
@@ -19,40 +20,38 @@ public class EnemyMovement : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         startPosition = transform.position;
+        restartPosition = transform.position;
         endPosition = player.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-       
-        transform.position = Vector3.Slerp(startPosition, endPosition, Time.time/delay);
-        startPosition = transform.position;
-        endPosition = player.position;
-        RotateToPlayer();
+        if (GameManager.Instance.isGaming)
+        {
+            transform.position = Vector3.Slerp(startPosition, endPosition, Time.time / delay);
+            startPosition = transform.position;
+            endPosition = player.position;
+            RotateToPlayer();
+        }
+          
     }
     public void RotateToPlayer()
     {
-        Vector3 fromDirection = startPosition;
-        Vector3 toDirection = endPosition;
-        Quaternion.FromToRotation( fromDirection, toDirection);
+        transform.rotation = Quaternion.Lerp(transform.rotation, player.transform.rotation, Time.deltaTime * 8f);
     }
     private void FixedUpdate()
     {
+        if (GameManager.Instance.isGaming)
+            rigidbody.AddForce(new Vector2(0f, moveSpeed* Time.deltaTime));
+
        
-     rigidbody.AddForce(new Vector2(0f, moveSpeed* Time.deltaTime));
-       
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+  
+    public void ResrtartEnemy()
     {
-        if (collision.gameObject.tag == "Player")
-        {
-            collision.gameObject.GetComponentInChildren<ParticleSystem>().Play();
-           // Invoke("GameOver", 2f);
-        }
+        transform.SetPositionAndRotation(startPosition, Quaternion.Euler(Vector3.zero));
+
     }
-    void GameOver()
-    {
-        SceneManager.LoadScene(0);
-    }
+  
 }
