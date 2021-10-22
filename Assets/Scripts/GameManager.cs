@@ -5,7 +5,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
+  public enum GameStatus
+    {
+        isStarting,
+        isGaming,
+        onPause,
+        isStop,
+    }
     public static GameManager Instance { get; private set; }
 
     public CanvasGroup startGroupe;
@@ -15,9 +21,11 @@ public class GameManager : MonoBehaviour
 
     public TextMeshProUGUI countLifes;
    
-    int countlife;
+    int countlife=12;
 
-    [HideInInspector] public bool isGaming;
+    // [HideInInspector] public bool isGaming;
+    [HideInInspector] public GameStatus statusOfGame;
+  
 
     private void Awake()
     {
@@ -26,8 +34,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        OnCanvasGroupe("Start");
-        countlife = 12;
+        DisplayUIScreen("Start");
     }
 
     // Update is called once per frame
@@ -37,68 +44,68 @@ public class GameManager : MonoBehaviour
     }
     public void StartGame()
     {
-        OnCanvasGroupe("Play");
+        DisplayUIScreen("Play");
 
     }
 
-    public void TakeDamage()
+    public void DisplayUIScreen(string nameOfScreen)
     {
-        countlife-- ;
-        if (countlife <= 0)
-        {
-            FailGame();
-        }
-    }
-    public void OnCanvasGroupe(string nameCanvas)
-    {
-        switch (nameCanvas)
+        switch (nameOfScreen)
         {
             case "Start":
-                LockRestCanvases(startGroupe);
-
+                ActivateUIScreen(startGroupe);
+                statusOfGame = GameStatus.isStarting;
                 break;
             case "Play":
-                isGaming = true;
-                LockRestCanvases(playGroupe);
+                statusOfGame = GameStatus.isGaming;
+                ActivateUIScreen(playGroupe);
                 break;
             case "Fail":
-                isGaming = false;
-                LockRestCanvases(failGroupe);
+                statusOfGame = GameStatus.isStop;
+                 ActivateUIScreen(failGroupe);
                 break;
 
         }
     }
-    void LockRestCanvases(CanvasGroup canvasgr)
+    void ActivateUIScreen(CanvasGroup uiScreen)
     {
-        CanvasGroup[] canvasGroupes = GameObject.FindObjectsOfType<CanvasGroup>();
-        foreach (CanvasGroup cGr in canvasGroupes)
-        {
+        DeactivateOtherUIScreens(uiScreen);
 
-            cGr.alpha = 0;
-            cGr.interactable = false;
-            cGr.blocksRaycasts = false;
+        uiScreen.alpha = 1;
+        uiScreen.interactable = true;
+        uiScreen.blocksRaycasts = true;
 
-        }
-        canvasgr.alpha = 1;
-        canvasgr.interactable = true;
-        canvasgr.blocksRaycasts = true;
         headerGroupe.alpha = 1;
         headerGroupe.interactable = true;
         headerGroupe.blocksRaycasts = true;
 
     }
+
+    void DeactivateOtherUIScreens(CanvasGroup uiScreen)
+    {
+        CanvasGroup[] canvasGroupes = GameObject.FindObjectsOfType<CanvasGroup>();
+        foreach (CanvasGroup cGr in canvasGroupes)
+        {
+            if (cGr != uiScreen)
+            {
+                cGr.alpha = 0;
+                cGr.interactable = false;
+                cGr.blocksRaycasts = false;
+            }
+        }
+    }
     public void FailGame()
     {
-     
-        OnCanvasGroupe("Fail");
+
+        DisplayUIScreen("Fail");
 
     }
     public void RestartGame()
     {
         countlife=12;
         PlaneMove.Instance.RestartPlane();
-      
-        OnCanvasGroupe("Play");
+        SetEnemyPositionRestart();
+        DisplayUIScreen("Play");
 
     }
    
@@ -107,4 +114,23 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
+    public void DisplayDamage()
+    {
+        countlife--;
+        if (countlife <= 0)
+        {
+            FailGame();
+        }
+    }
+    void SetEnemyPositionRestart()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        foreach (GameObject enemy in enemies)
+        {
+            enemy.GetComponent<EnemyMovement>().RestartEnemy();
+        }
+    }
+
+
 }

@@ -5,50 +5,51 @@ using UnityEngine.SceneManagement;
 
 public class EnemyMovement : MonoBehaviour
 {
-    Rigidbody2D rigidbody;
-    [SerializeField] float moveSpeed=50f;
     [SerializeField] Transform player;
     Vector3 startPosition;
-    Vector3 restartPosition;
     Vector3 endPosition;
-    [SerializeField] float delay;
+    [SerializeField] float delay=500f;
   
-
     
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
         startPosition = transform.position;
-        restartPosition = transform.position;
-        endPosition = player.position;
+        if (player != null)
+        {
+            endPosition = player.position;
+        }
+        else
+        {
+            player = GameObject.Find("Player").transform;
+        }
+       
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.isGaming)
+        if (GameManager.Instance.statusOfGame == GameManager.GameStatus.isGaming)
         {
-            transform.position = Vector3.Slerp(startPosition, endPosition, Time.time / delay);
-            startPosition = transform.position;
-            endPosition = player.position;
-            RotateToPlayer();
+            FollowThePlayer();
         }
           
+    }
+
+    void FollowThePlayer()
+    {
+        transform.position = Vector3.Slerp(startPosition, endPosition, Time.time / delay);
+        startPosition = transform.position;
+        endPosition = player.position;
+        RotateToPlayer();
     }
     public void RotateToPlayer()
     {
         transform.rotation = Quaternion.Lerp(transform.rotation, player.transform.rotation, Time.deltaTime * 8f);
     }
-    private void FixedUpdate()
-    {
-        if (GameManager.Instance.isGaming)
-            rigidbody.AddForce(new Vector2(0f, moveSpeed* Time.deltaTime));
-
-       
-    }
+   
   
-    public void ResrtartEnemy()
+    public void RestartEnemy()
     {
         transform.SetPositionAndRotation(startPosition, Quaternion.Euler(Vector3.zero));
 

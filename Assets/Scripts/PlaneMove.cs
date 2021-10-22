@@ -5,12 +5,13 @@ using UnityEngine;
 public class PlaneMove : MonoBehaviour
 {
     public static PlaneMove Instance { get; private set; }
-    Rigidbody2D rb;
-    [SerializeField]
-    private float forceFactor = 50f;
+    private Rigidbody2D rb;
+    [SerializeField] private float forceFactor = 50f;
     public VariableJoystick joystick;
     public ParticleSystem boomEffect;
-    Vector3 startPosition;
+    private Vector3 startPosition;
+    public float motionSpeed = 2f;
+    public float rotateSpeed = 8f;
 
     private void Awake()
     {
@@ -24,7 +25,7 @@ public class PlaneMove : MonoBehaviour
     } 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.isGaming)
+        if (GameManager.Instance.statusOfGame==GameManager.GameStatus.isGaming)
         {
             FlyForward();
         }
@@ -34,45 +35,34 @@ public class PlaneMove : MonoBehaviour
     public void FlyForward()
     {
          rb.AddForce(new Vector2(0f, forceFactor * Time.fixedDeltaTime));
-       
 
         if (joystick.Direction.x != 0 || joystick.Direction.y != 0)
         {
-            float angle = Mathf.Atan2(joystick.Direction.x, joystick.Direction.y) * Mathf.Rad2Deg;
-            rb.AddForce(new Vector3(joystick.Direction.x / Screen.width * 320,
-                                joystick.Direction.y / Screen.height * 526, 0f) *2f, ForceMode2D.Impulse);
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f,0f, 
-                -angle), Time.deltaTime * 8f);
+            ChangeDirection();
         }
-
-
     }
 
+    void ChangeDirection()
+    {
+        float angle = Mathf.Atan2(joystick.Direction.x, joystick.Direction.y) * Mathf.Rad2Deg;
+
+        rb.AddForce(new Vector2(joystick.Direction.x / Screen.width * 320,
+                            joystick.Direction.y / Screen.height * 526) * motionSpeed, ForceMode2D.Impulse);
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, 0f,
+            -angle), Time.deltaTime * rotateSpeed);
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
         {
            boomEffect.Play();
-            GameManager.Instance.TakeDamage();
-            
-
+            GameManager.Instance.DisplayDamage();
         }
     }
 
     public void RestartPlane()
     {
-       GetEnemyPositionRestart();
-        transform.SetPositionAndRotation(startPosition, Quaternion.Euler(Vector3.zero));
-       
-    }
-
-    void GetEnemyPositionRestart()
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-
-        foreach(GameObject enemy in enemies)
-        {
-            enemy.GetComponent<EnemyMovement>().ResrtartEnemy();
-        }
+        transform.SetPositionAndRotation(startPosition, Quaternion.Euler(Vector2.zero));
     }
 }
