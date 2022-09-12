@@ -4,34 +4,35 @@ using UnityEngine;
 
 public class PlaneMove : MonoBehaviour
 {
-    public static PlaneMove Instance { get; private set; }
+  
+   
     private Rigidbody2D rb;
     [SerializeField] private float forceFactor = 50f;
-    public VariableJoystick joystick;
-    public ParticleSystem boomEffect;
+    [SerializeField] private VariableJoystick joystick;
+    [SerializeField] private ParticleSystem boomEffect;
     private Vector3 startPosition;
-    public float motionSpeed = 2f;
-    public float rotateSpeed = 8f;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
+    [SerializeField] private float motionSpeed = 2f;
+    [SerializeField] private float rotateSpeed = 8f;
+    [SerializeField] private CanvasController canvas;
+    bool canMove;
     private void Start()
     {
+        GameManager.Instance.IsGaming += PlayGame;
         rb = GetComponent<Rigidbody2D>();
         startPosition = transform.position;
         
     } 
     private void FixedUpdate()
     {
-        if (GameManager.Instance.statusOfGame==GameManager.GameStatus.isGaming)
+        if (canMove)
         {
             FlyForward();
         }
-       
     }
-
+    void PlayGame()
+    {
+        canMove = true;
+    }
     public void FlyForward()
     {
          rb.AddForce(new Vector2(0f, forceFactor * Time.fixedDeltaTime));
@@ -54,10 +55,10 @@ public class PlaneMove : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.CompareTag("Enemy"))
         {
            boomEffect.Play();
-            GameManager.Instance.DisplayDamage();
+            canvas.DisplayDamage();
         }
     }
 

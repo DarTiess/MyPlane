@@ -1,31 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-  public enum GameStatus
-    {
-        isStarting,
-        isGaming,
-        onPause,
-        isStop,
-    }
+    public event Action IsStarting;
+    public event Action IsGaming;
+    public event Action OnPause;
+    public event Action IsFail;
+    public event Action IsWin;
     public static GameManager Instance { get; private set; }
 
-    public CanvasGroup startGroupe;
-    public CanvasGroup playGroupe;
-    public CanvasGroup failGroupe;
-    public CanvasGroup headerGroupe;
+    [SerializeField] private LevelsManager levelsManager;
 
-    public TextMeshProUGUI countLifes;
-   
-    int countlife=12;
-
-    // [HideInInspector] public bool isGaming;
-    [HideInInspector] public GameStatus statusOfGame;
-  
+ 
 
     private void Awake()
     {
@@ -34,103 +24,58 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        DisplayUIScreen("Start");
+        StartGame();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        countLifes.text = countlife.ToString();
-    }
+   
     public void StartGame()
     {
-        DisplayUIScreen("Play");
-
+        Time.timeScale = 0;
+        IsStarting?.Invoke();
     }
 
-    public void DisplayUIScreen(string nameOfScreen)
+    public void PlayGame()
     {
-        switch (nameOfScreen)
-        {
-            case "Start":
-                ActivateUIScreen(startGroupe);
-                statusOfGame = GameStatus.isStarting;
-                break;
-            case "Play":
-                statusOfGame = GameStatus.isGaming;
-                ActivateUIScreen(playGroupe);
-                break;
-            case "Fail":
-                statusOfGame = GameStatus.isStop;
-                 ActivateUIScreen(failGroupe);
-                break;
-
-        }
+        Time.timeScale = 1;
+        IsGaming?.Invoke();
     }
-    void ActivateUIScreen(CanvasGroup uiScreen)
-    {
-        DeactivateOtherUIScreens(uiScreen);
-
-        uiScreen.alpha = 1;
-        uiScreen.interactable = true;
-        uiScreen.blocksRaycasts = true;
-
-        headerGroupe.alpha = 1;
-        headerGroupe.interactable = true;
-        headerGroupe.blocksRaycasts = true;
-
-    }
-
-    void DeactivateOtherUIScreens(CanvasGroup uiScreen)
-    {
-        CanvasGroup[] canvasGroupes = GameObject.FindObjectsOfType<CanvasGroup>();
-        foreach (CanvasGroup cGr in canvasGroupes)
-        {
-            if (cGr != uiScreen)
-            {
-                cGr.alpha = 0;
-                cGr.interactable = false;
-                cGr.blocksRaycasts = false;
-            }
-        }
-    }
+ 
     public void FailGame()
     {
+        IsFail?.Invoke();
+        Time.timeScale = 0;
 
-        DisplayUIScreen("Fail");
-
+    }
+    public void WinGame()
+    {
+        IsWin?.Invoke();
+        Time.timeScale = 0;
+    }
+    public void PauseGame()
+    {
+        OnPause?.Invoke();
+        Time.timeScale =0;
     }
     public void RestartGame()
     {
-        countlife=12;
-        PlaneMove.Instance.RestartPlane();
-        SetEnemyPositionRestart();
-        DisplayUIScreen("Play");
+        levelsManager.RestartScene();
 
     }
+    public void NextLevel()
+    {
+        levelsManager.LoadNextLevel();
+    }
    
+    public void CleaSaves()
+    {
+        PlayerPrefs.DeleteAll();
+    }
 
     public void QuiteGame()
     {
         Application.Quit();
     }
-    public void DisplayDamage()
-    {
-        countlife--;
-        if (countlife <= 0)
-        {
-            FailGame();
-        }
-    }
-    void SetEnemyPositionRestart()
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-
-        foreach (GameObject enemy in enemies)
-        {
-            enemy.GetComponent<EnemyMovement>().RestartEnemy();
-        }
-    }
-
+  
 
 }

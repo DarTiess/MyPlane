@@ -2,18 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] Transform player;
     Vector3 startPosition;
     Vector3 endPosition;
-    [SerializeField] float delay=500f;
+    [SerializeField] float delay=1f;
+    bool canMove;
+
   
-    
+    Vector3 targetLastPos;
+    Tweener tween;
+
     // Start is called before the first frame update
     void Start()
     {
+        GameManager.Instance.IsGaming += PlayGame;
         startPosition = transform.position;
         if (player != null)
         {
@@ -27,25 +33,30 @@ public class EnemyMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if (GameManager.Instance.statusOfGame == GameManager.GameStatus.isGaming)
+        if (canMove)
         {
-            FollowThePlayer();
-        }
-          
+            if (targetLastPos == player.position) return;
+
+            delay = Vector3.Distance(transform.position, player.position);
+            tween.ChangeEndValue(player.position, true).Restart();
+            targetLastPos = player.position;
+            RotateToPlayer();
+        } 
     }
 
-    void FollowThePlayer()
+    void PlayGame()
     {
-        transform.position = Vector3.Slerp(startPosition, endPosition, Time.time / delay);
-        startPosition = transform.position;
-        endPosition = player.position;
-        RotateToPlayer();
+        canMove = true;
+        tween = transform.DOMove(player.position,delay/2).SetAutoKill(false);
+       
+        targetLastPos = player.position;
     }
+  
     public void RotateToPlayer()
     {
-        transform.rotation = Quaternion.Lerp(transform.rotation, player.transform.rotation, Time.deltaTime * 8f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, player.transform.rotation, Time.fixedDeltaTime * 8f);
     }
    
   
