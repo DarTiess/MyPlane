@@ -1,28 +1,36 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using DG.Tweening;
+using GameEvents;
+using UnityEngine.UI;
+
+
 public class CanvasController : MonoBehaviour
 {
-    
-    public CanvasGroup startGroupe;
-    public CanvasGroup playGroupe;
-    public CanvasGroup failGroupe;
-    public CanvasGroup headerGroupe;
-
-    public TextMeshProUGUI countLifes;
-
+   
+    [SerializeField] private CanvasGroup startGroupe;
+    [SerializeField] private CanvasGroup playGroupe;
+    [SerializeField] private CanvasGroup failGroupe;
+    [SerializeField] private CanvasGroup headerGroupe;
+    [SerializeField] private TextMeshProUGUI countLifes;
     [SerializeField] private int lifesOnStart = 12;
-    List<CanvasGroup> canvasGroupes = new List<CanvasGroup>();
+    [SerializeField] private Button startButton;
+
+    private List<CanvasGroup> canvasGroupes = new List<CanvasGroup>();
+    private IGameEvents gameEvents;
+    
     public int _Lifes
     {
         get { return PlayerPrefs.GetInt("Lifes"); }
         set { PlayerPrefs.SetInt("Lifes", value); }
     }
-    // Start is called before the first frame update
-    void Start()
-    {  countLifes.text = lifesOnStart.ToString();
+
+    public void Init(IGameEvents gameEvents)
+   {
+       this.gameEvents = gameEvents;
+        countLifes.text = lifesOnStart.ToString();
         if (_Lifes <= 0)
         {
             _Lifes = lifesOnStart;
@@ -32,18 +40,17 @@ public class CanvasController : MonoBehaviour
             lifesOnStart = _Lifes;
         }
         countLifes.text = lifesOnStart.ToString();
-       GameManager.Instance.IsStarting += OnStart;
      
-       GameManager.Instance.IsFail += OnFail;
-
         canvasGroupes.Add(startGroupe);
         canvasGroupes.Add(playGroupe);
         canvasGroupes.Add(failGroupe);
-
+       gameEvents.IsStarting += OnStart;
+       gameEvents.IsFail += OnFail;
+       startButton.onClick.AddListener(OnGame);
       
     }
 
-   void OnStart()
+   private void OnStart()
     {
         headerGroupe.alpha = 1;
         headerGroupe.interactable = true;
@@ -51,9 +58,9 @@ public class CanvasController : MonoBehaviour
       
         ActivateUIScreen(startGroupe);
     }
-   public void OnGame()
+   private void OnGame()
     {
-        GameManager.Instance.PlayGame();
+        gameEvents.PlayGame();
         ActivateUIScreen(playGroupe);
     }
     void OnFail()
@@ -75,7 +82,7 @@ public class CanvasController : MonoBehaviour
             });
         if (lifesOnStart <= 0)
         {
-            GameManager.Instance.FailGame();
+          //  gameEvents.FailGame();
         }
     }
 
