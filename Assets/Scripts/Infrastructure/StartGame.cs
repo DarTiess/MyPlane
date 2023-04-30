@@ -4,40 +4,42 @@ using Enemy;
 using Input;
 using Player;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 public class StartGame : MonoBehaviour
 {
-    [SerializeField] private LevelsManager levelsManager;
+    [FormerlySerializedAs("levelsManager")]
+    [SerializeField] private SceneLoader sceneLoader;
     [SerializeField] private PlayerMove playerPrefab;
-    [SerializeField] private CanvasController canvasPrefab;
+    [FormerlySerializedAs("canvasPrefab")]
+    [SerializeField] private UIController uiPrefab;
     [SerializeField] private EnemyMovement enemyPrefab;
     [SerializeField] private List<EnemySetting> enemySettings;
 
     private CameraFollow.CameraFollow mainCamera;
     private IInputService inputService;
-    private GameEvents.GameEvents gameEvents;
-    private CanvasController canvas;
+    private GameEvents.GameStateEvents gameStateEvents;
+    private UIController ui;
     private PlayerMove player;
 
     private void Awake()
+    { 
+       // sceneLoader.StartLevel();
+        inputService = InputService();
+        CreateGameState();
+        CreateCanvas();
+        CreatePlayer();
+        InitCamera();
+        CreateEnemies();
+        gameStateEvents.StartGame();
+      DontDestroyOnLoad(this);
+    }
+
+    private void CreateGameState()
     {
-      //  levelsManager.StartGame();
-      inputService = InputService();
-
-      gameEvents = new GameEvents.GameEvents();
-      
-      CreateCanvas();
-
-      CreatePlayer();
-
-      InitCamera();
-
-      CreateEnemies();
-      
-      gameEvents.StartGame();
-
-     DontDestroyOnLoad(this);
+        gameStateEvents = new GameEvents.GameStateEvents();
+        gameStateEvents.Init(sceneLoader);
     }
 
     private IInputService InputService()
@@ -54,14 +56,14 @@ public class StartGame : MonoBehaviour
 
     private void CreateCanvas()
     {
-        canvas = Instantiate(canvasPrefab);
-        canvas.Init(gameEvents);
+        ui = Instantiate(uiPrefab);
+        ui.Init(gameStateEvents, gameStateEvents);
     }
 
     private void CreatePlayer()
     {
         player = Instantiate(playerPrefab, transform.position, Quaternion.identity);
-        player.Init(inputService);
+        player.Init(inputService, gameStateEvents);
     }
 
     private void InitCamera()
@@ -75,7 +77,7 @@ public class StartGame : MonoBehaviour
         foreach (EnemySetting setting in enemySettings)
         {
             EnemyMovement enemy = Instantiate(enemyPrefab, GetEnemyRandomPosition(), Quaternion.identity);
-            enemy.Init(gameEvents, player, setting);
+            enemy.Init(gameStateEvents, player, setting);
         }
     }
 

@@ -29,7 +29,8 @@ namespace Enemy
 
         public void Init(IGameEvents gameEvents, PlayerMove playerMove, EnemySetting settings)
         {
-            gameEvents.IsGaming += PlayGame;
+            gameEvents.Gaming += PlayGame;
+            gameEvents.Fail += StopGame;
             enemyColor = GetComponent<EnemyColor>();
             
             
@@ -52,22 +53,26 @@ namespace Enemy
             RotateToPlayer();
         }
 
-       
 
-        private void PlayGame()
-        {
-            canMove = true;
-            tween = transform.DOMove(player.position,delay/2).SetAutoKill(false);
-       
-            targetLastPos = player.position;
-        }
-  
         private void RotateToPlayer()
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, player.transform.rotation, Time.fixedDeltaTime * 8f);
         }
-   
-  
+
+        private void PlayGame()
+        {
+            canMove = true;
+            tween = transform.DOMove(player.position,delay/2).SetUpdate(UpdateType.Fixed).SetAutoKill(false);
+       
+            targetLastPos = player.position;
+        }
+
+        private void StopGame()
+        {
+            canMove = false;
+        }
+
+
         public void RestartEnemy()
         {
             transform.SetPositionAndRotation(startPosition, Quaternion.Euler(Vector3.zero));

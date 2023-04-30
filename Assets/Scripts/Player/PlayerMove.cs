@@ -1,4 +1,5 @@
-﻿using Input;
+﻿using GameEvents;
+using Input;
 using UnityEngine;
 
 namespace Player
@@ -11,6 +12,7 @@ namespace Player
         [SerializeField] private ParticleSystem boomEffect;
 
         private IInputService inputService;
+        private IGameState gameStates;
         private Rigidbody2D rigidBody;
         private Vector2 temp;
 
@@ -25,9 +27,10 @@ namespace Player
             Move();
         }
 
-        public void Init(IInputService _inputService)
+        public void Init(IInputService _inputService, IGameState _gameStates)
         {
             inputService = _inputService;
+            gameStates = _gameStates;
         }
 
         private void Move()
@@ -36,13 +39,15 @@ namespace Player
             temp.y = inputService.GetVertical;
 
             rigidBody.MovePosition(rigidBody.position + temp * (playerSpeed * Time.fixedDeltaTime) );
-            RotatePlayer();
+            if (temp != Vector2.zero)
+            {
+                RotatePlayer();
+            }
         }
 
         private void RotatePlayer()
         {
             float angle = Mathf.Atan2(inputService.GetHorizontal, inputService.GetVertical) * Mathf.Rad2Deg;
-
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, 0f,-angle), Time.deltaTime * rotationSpeed);
         }
         
@@ -51,7 +56,7 @@ namespace Player
             if (collision.gameObject.CompareTag("Enemy"))
             {
                 boomEffect.Play();
-              //  canvas.DisplayDamage();
+                gameStates.TakeDamage();
             }
         }
     }

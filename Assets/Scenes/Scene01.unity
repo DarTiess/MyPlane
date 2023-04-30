@@ -153,10 +153,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 352a9e5fb186f3c489c2d6d2cacc0f03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelsManager: {fileID: 11400000, guid: c63a94bd9b2283f4c9579ac40861efd7, type: 2}
+  sceneLoader: {fileID: 11400000, guid: c63a94bd9b2283f4c9579ac40861efd7, type: 2}
   playerPrefab: {fileID: 5454273943102998869, guid: 0da9dc0dec65b084bb70692f77b01bed,
     type: 3}
-  canvasPrefab: {fileID: 5968916517325196491, guid: edb2c2ceb47944145ae00f8c95a8ce20,
+  uiPrefab: {fileID: 5968916517325196491, guid: edb2c2ceb47944145ae00f8c95a8ce20,
     type: 3}
   enemyPrefab: {fileID: 4878688515714111926, guid: 3ec47b7a99a72264e89d18843d5cae75,
     type: 3}
