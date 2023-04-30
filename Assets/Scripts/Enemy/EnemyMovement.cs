@@ -12,8 +12,6 @@ namespace Enemy
         [SerializeField] private EnemyTrail enemyTrail;
         private Transform player;
         private float delay=1f;
-        private Vector3 startPosition;
-        private Vector3 endPosition;
         private bool canMove;
         private Vector3 targetLastPos;
         private Tweener tween;
@@ -30,6 +28,7 @@ namespace Enemy
         {
             gameEvents.Gaming += PlayGame;
             gameEvents.Fail += StopGame;
+            gameEvents.Pause += StopGame;
             enemyColor = GetComponent<EnemyColor>();
             
             
@@ -37,7 +36,6 @@ namespace Enemy
             enemyTrail.SetTrailsSettings(settings.color);
 
             delay = settings.delay;
-            startPosition = transform.position;
             player = playerMove.transform;
         }
         private void Move()
@@ -57,6 +55,7 @@ namespace Enemy
         private void PlayGame()
         {
             canMove = true;
+            tween.Play();
             tween = transform.DOMove(player.position,delay/2).SetUpdate(UpdateType.Fixed).SetAutoKill(false);
        
             targetLastPos = player.position;
@@ -64,10 +63,7 @@ namespace Enemy
         private void StopGame()
         {
             canMove = false;
-        }
-        public void RestartEnemy()
-        {
-            transform.SetPositionAndRotation(startPosition, Quaternion.Euler(Vector3.zero));
+            tween.Pause();
         }
     }
 }

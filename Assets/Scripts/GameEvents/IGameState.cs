@@ -6,5 +6,7 @@
         void FailGame();
         void TakeDamage();
         void RestartGame();
+        void PauseGame();
+        void QuiteGame();
     }
 }

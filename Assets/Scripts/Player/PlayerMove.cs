@@ -15,6 +15,7 @@ namespace Player
         private IGameState gameStates;
         private Rigidbody2D rigidBody;
         private Vector2 temp;
+        private bool canMove;
 
         private void Start()
         {
@@ -22,13 +23,19 @@ namespace Player
         }
         private void FixedUpdate()
         {
-            Move();
+            if(canMove)
+            {
+                Move();
+            }
         }
-        public void Init(IInputService _inputService, IGameState _gameStates)
+        public void Init(IInputService _inputService,IGameEvents gameEvents, IGameState _gameStates)
         {
             inputService = _inputService;
             gameStates = _gameStates;
+            gameEvents.Gaming += PlayGame;
+            gameEvents.Pause += PausedGame;
         }
+
         private void Move()
         {
             temp.x = inputService.GetHorizontal;
@@ -40,11 +47,13 @@ namespace Player
                 RotatePlayer();
             }
         }
+
         private void RotatePlayer()
         {
             float angle = Mathf.Atan2(inputService.GetHorizontal, inputService.GetVertical) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, 0f,-angle), Time.deltaTime * rotationSpeed);
         }
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Enemy"))
@@ -52,6 +61,16 @@ namespace Player
                 boomEffect.Play();
                 gameStates.TakeDamage();
             }
+        }
+
+        private void PlayGame()
+        {
+            canMove = true;
+        }
+
+        private void PausedGame()
+        {
+            canMove = false;
         }
     }
 }

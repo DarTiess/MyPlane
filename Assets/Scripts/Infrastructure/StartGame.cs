@@ -3,6 +3,7 @@ using Data;
 using Enemy;
 using Input;
 using Player;
+using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -64,7 +65,7 @@ namespace Infrastructure
         private void CreatePlayer()
         {
             player = Instantiate(playerPrefab, transform.position, Quaternion.identity);
-            player.Init(inputService, gameStateEvents);
+            player.Init(inputService,gameStateEvents, gameStateEvents);
         }
         private void InitCamera()
         {

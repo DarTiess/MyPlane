@@ -37,7 +37,6 @@ namespace GameEvents
         public void PauseGame()
         {
             Pause?.Invoke();
-            Time.timeScale =0;
         }
         public void RestartGame()
         {
@@ -47,10 +46,7 @@ namespace GameEvents
         {
              sceneLoader.LoadNextLevel();
         }
-        public void ClearSaves()
-        {
-            PlayerPrefs.DeleteAll();
-        }
+
         public void QuiteGame()
         {
             Application.Quit();
