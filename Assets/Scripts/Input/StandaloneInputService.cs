@@ -2,8 +2,6 @@ namespace Input
 {
     public class StandaloneInputService : InputService
     {
-      
-     
         public override float GetHorizontal
         {
             get

@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using Data;
+using DG.Tweening;
 using GameEvents;
 using TMPro;
 using UnityEngine;
@@ -9,30 +10,32 @@ namespace UI
       {
           [SerializeField] private TextMeshProUGUI countLifes;
           [SerializeField] private int lifesOnStart = 12;
-          private IGameState _gameState;
-        
-          public int _Lifes
-          {
-              get { return PlayerPrefs.GetInt("Lifes"); }
-              set { PlayerPrefs.SetInt("Lifes", value); }
-          }
+          private IGameState gameState;
+          private IDataSaver dataSaver;
+          private int lifes;
    
-          public void SetLifesCount(IGameEvents gameEvents, IGameState gameState)
+          public void Init(IGameEvents gameEvents, IGameState gameStates, IDataSaver dataSavers)
           {
-              _gameState = gameState;
+              gameState = gameStates;
               gameEvents.TakeDamage += DisplayDamage;
-              if (_Lifes <= 0)
+              dataSaver = dataSavers;
+             
+              SetLifesCountText();
+          }
+          private void SetLifesCountText()
+          {
+              lifes = dataSaver.Lifes;
+              if (lifes <= 0)
               {
-                  _Lifes = lifesOnStart;
+                  lifes = lifesOnStart;
+                  dataSaver.Lifes = lifes;
               }
               else
               {
-                  lifesOnStart = _Lifes;
+                  lifesOnStart = lifes;
               }
-   
               countLifes.text = lifesOnStart.ToString();
           }
-   
           private void DisplayDamage()
           {
               if (lifesOnStart <= 0)
@@ -40,7 +43,8 @@ namespace UI
                   return;
               }
               lifesOnStart-=1;
-              _Lifes = lifesOnStart;
+              lifes = lifesOnStart;
+              dataSaver.Lifes = lifes;
               countLifes.text = lifesOnStart.ToString();
               countLifes.transform.DOScale(1.5f, 0.5f)
                         .OnComplete(() => {
@@ -48,7 +52,7 @@ namespace UI
                         });
               if (lifesOnStart <= 0)
               {
-                  _gameState.FailGame();
+                  gameState.FailGame();
               }
           }
       }

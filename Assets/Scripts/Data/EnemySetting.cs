@@ -2,7 +2,7 @@
 
 namespace Data
 {
-    [CreateAssetMenu(menuName = "EnemySettings", fileName = "EnemyData", order = 51)]
+    [CreateAssetMenu(menuName = "Data/EnemySettings", fileName = "EnemyData", order = 51)]
     public class EnemySetting: ScriptableObject
     {
         public Color color;

@@ -26,7 +26,6 @@ namespace Enemy
                 Move();
             } 
         }
-
         public void Init(IGameEvents gameEvents, PlayerMove playerMove, EnemySetting settings)
         {
             gameEvents.Gaming += PlayGame;
@@ -41,7 +40,6 @@ namespace Enemy
             startPosition = transform.position;
             player = playerMove.transform;
         }
-
         private void Move()
         {
             if (targetLastPos == player.position) 
@@ -52,13 +50,10 @@ namespace Enemy
             targetLastPos = player.position;
             RotateToPlayer();
         }
-
-
         private void RotateToPlayer()
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, player.transform.rotation, Time.fixedDeltaTime * 8f);
         }
-
         private void PlayGame()
         {
             canMove = true;
@@ -66,18 +61,13 @@ namespace Enemy
        
             targetLastPos = player.position;
         }
-
         private void StopGame()
         {
             canMove = false;
         }
-
-
         public void RestartEnemy()
         {
             transform.SetPositionAndRotation(startPosition, Quaternion.Euler(Vector3.zero));
-
         }
-  
     }
 }

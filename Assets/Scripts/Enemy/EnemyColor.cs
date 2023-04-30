@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Enemy
@@ -6,9 +5,7 @@ namespace Enemy
     [RequireComponent(typeof(SpriteRenderer))]
     public class EnemyColor: MonoBehaviour
     {
-      
         private SpriteRenderer renderer;
-
         public void SetEnemyColor(Color color)
         {
             renderer = GetComponent<SpriteRenderer>();

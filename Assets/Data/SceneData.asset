@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52e2d93297fe32e44814eadd15a5f700, type: 3}
-  m_Name: LevelManager
+  m_Script: {fileID: 11500000, guid: 9119cc2a83544101877c97e98d75b7d3, type: 3}
+  m_Name: SceneData
   m_EditorClassIdentifier: 
   scenes:
   - Scene01

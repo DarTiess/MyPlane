@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
-using TMPro;
+using Data;
 using UnityEngine;
-using DG.Tweening;
 using GameEvents;
 using UI;
 using UnityEngine.UI;
@@ -14,7 +12,6 @@ public class UIController : MonoBehaviour
     [SerializeField] private CanvasGroup playGroupe;
     [SerializeField] private CanvasGroup failGroupe;
     [SerializeField] private CanvasGroup headerGroupe;
-   
     [SerializeField] private Button startButton;
     [SerializeField] private Button restartButton;
 
@@ -22,11 +19,11 @@ public class UIController : MonoBehaviour
     private IGameState gameState;
     private Health health;
 
-    public void Init(IGameEvents gameEvents, IGameState gameStates)
+    public void Init(IGameEvents gameEvents, IGameState gameStates, IDataSaver dataserver)
    {
        gameState = gameStates;
        health = GetComponent<Health>();
-        health.SetLifesCount(gameEvents, gameStates);
+        health.Init(gameEvents, gameStates, dataserver);
         CreateCanvasList();
         
        gameEvents.Starting += OnStart;
@@ -34,12 +31,10 @@ public class UIController : MonoBehaviour
        startButton.onClick.AddListener(OnGame);
        restartButton.onClick.AddListener(OnRestartGame);
    }
-
     private void OnRestartGame()
     {
         gameState.RestartGame();
     }
-
     private void CreateCanvasList()
     {
         canvasGroupes.Add(startGroupe);
@@ -81,6 +76,4 @@ public class UIController : MonoBehaviour
             }
         }
     }
-   
-  
 }

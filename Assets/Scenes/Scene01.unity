@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 352a9e5fb186f3c489c2d6d2cacc0f03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 11400000, guid: c63a94bd9b2283f4c9579ac40861efd7, type: 2}
+  sceneSettings: {fileID: 11400000, guid: a49000a20f120074385301160a699fd9, type: 2}
   playerPrefab: {fileID: 5454273943102998869, guid: 0da9dc0dec65b084bb70692f77b01bed,
     type: 3}
   uiPrefab: {fileID: 5968916517325196491, guid: edb2c2ceb47944145ae00f8c95a8ce20,

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Enemy
@@ -7,7 +6,6 @@ namespace Enemy
     public class EnemyTrail : MonoBehaviour
     {
         private TrailRenderer trailRenderer;
-        
         public void SetTrailsSettings(Color color)
         {
             trailRenderer = GetComponent<TrailRenderer>();

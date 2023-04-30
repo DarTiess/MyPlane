@@ -1,50 +1,49 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using Data;
 using UnityEngine.SceneManagement;
 
-[CreateAssetMenu(fileName = "LevelManager", menuName = "LevelManager", order = 51)]
-public class SceneLoader : ScriptableObject
+namespace Infrastructure
 {
-    public List<string> scenes;
-
-    public int CurrentScene
+    public class SceneLoader 
     {
-        get { return PlayerPrefs.GetInt("CurrentScene"); }
-        set { PlayerPrefs.SetInt("CurrentScene", value); }
-    }
-
-    public void StartLevel()
-    {
-        if (CurrentScene == 0) CurrentScene = 1;
-        LoadScene();
-    }
-
-    public void LoadNextLevel()
-    {
-        CurrentScene += 1;
-       
-        LoadScene();
-    }
-
-    public void LoadScene()
-    {
-        if (CurrentScene == 0) CurrentScene = 1;
-        int loadedScene = CurrentScene;
-        if (loadedScene <= scenes.Count) 
-        { 
-            loadedScene -= 1;
-        }
-        else
+        private IDataSaver dataSaver;
+        private List<string> scenes=new List<string>();
+        public SceneLoader(IDataSaver dataSaver, SceneSettings settings)
         {
-           loadedScene = 0;
+            this.dataSaver = dataSaver;
+            foreach (string scene in settings.scenes)
+            {
+                scenes.Add(scene);
+            }
         }
-
-        SceneManager.LoadScene(scenes[loadedScene]);
-    }
-
-    public void RestartScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        public void StartLevel()
+        {
+            if (dataSaver.CurrentScene == 0) dataSaver.CurrentScene = 1;
+            LoadScene();
+        }
+        public void LoadNextLevel()
+        {
+            dataSaver.CurrentScene += 1;
+       
+            LoadScene();
+        }
+        public void LoadScene()
+        {
+            if (dataSaver.CurrentScene == 0) dataSaver.CurrentScene = 1;
+            int loadedScene = dataSaver.CurrentScene;
+            if (loadedScene <= scenes.Count) 
+            { 
+                loadedScene -= 1;
+            }
+            else
+            {
+                loadedScene = 0;
+            }
+            SceneManager.LoadScene(scenes[loadedScene]);
+        }
+        public void RestartScene()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }
