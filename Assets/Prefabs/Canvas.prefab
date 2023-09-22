@@ -1062,16 +1062,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65831bda931983b42b73e0aa5453ee95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startGroupe: {fileID: 5968916518795930326}
-  playGroupe: {fileID: 5968916518466560023}
-  pauseGroupe: {fileID: 6069867858101203688}
-  failGroupe: {fileID: 5968916516874693246}
-  headerGroupe: {fileID: 5968916517827397005}
-  startButton: {fileID: 7624907534567834893}
-  restartButton: {fileID: 5968916517668397708}
-  pauseButton: {fileID: 661356783092929300}
-  continueButton: {fileID: 7214616600123807556}
-  exitButton: {fileID: 180879762816529175}
+  _startGroupe: {fileID: 5968916518795930326}
+  _playGroupe: {fileID: 5968916518466560023}
+  _pauseGroupe: {fileID: 6069867858101203688}
+  _failGroupe: {fileID: 5968916516874693246}
+  _headerGroupe: {fileID: 5968916517827397005}
+  _startButton: {fileID: 7624907534567834893}
+  _restartButton: {fileID: 5968916517668397708}
+  _pauseButton: {fileID: 661356783092929300}
+  _continueButton: {fileID: 7214616600123807556}
+  _exitButton: {fileID: 5968916517805844128}
 --- !u!114 &2861765673103619982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1084,8 +1084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e59d555e75ce4cd2bfb90d04b155c3b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countLifes: {fileID: 5968916518324687467}
-  lifesOnStart: 12
+  _countLifes: {fileID: 5968916518324687467}
 --- !u!1 &5968916517340059810
 GameObject:
   m_ObjectHideFlags: 0

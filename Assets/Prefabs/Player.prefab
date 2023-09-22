@@ -160,6 +160,7 @@ GameObject:
   - component: {fileID: 5454273943102998871}
   - component: {fileID: 5454273943102998868}
   - component: {fileID: 5454273943102998869}
+  - component: {fileID: 8923574847656192860}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -312,9 +313,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213fa8a97e3a45cbb3c92b91c05f27ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 7
-  rotationSpeed: 4
-  boomEffect: {fileID: 5454273943622187031}
+  _boomEffect: {fileID: 5454273943622187031}
+--- !u!114 &8923574847656192860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5454273943102998872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d084465dd3b46d9baa3e3b2bcf4745a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5454273943622187032
 GameObject:
   m_ObjectHideFlags: 0

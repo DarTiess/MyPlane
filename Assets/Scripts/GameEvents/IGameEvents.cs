@@ -8,6 +8,5 @@ namespace GameEvents
         event Action Starting;
         event Action Pause;
         event Action Fail;
-        event Action TakeDamage;
     }
 }

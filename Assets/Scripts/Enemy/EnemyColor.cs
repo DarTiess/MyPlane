@@ -5,11 +5,11 @@ namespace Enemy
     [RequireComponent(typeof(SpriteRenderer))]
     public class EnemyColor: MonoBehaviour
     {
-        private SpriteRenderer renderer;
+        private SpriteRenderer _renderer;
         public void SetEnemyColor(Color color)
         {
-            renderer = GetComponent<SpriteRenderer>();
-            renderer.color = color;
+            _renderer = GetComponent<SpriteRenderer>();
+            _renderer.color = color;
         }
     }
 }

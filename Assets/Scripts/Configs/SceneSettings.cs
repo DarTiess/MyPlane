@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Data
+namespace Configs
 {
     [CreateAssetMenu(menuName = "Data/SceneSettings", fileName = "SceneData")]
     public class SceneSettings : ScriptableObject
     {
-        public List<string> scenes;
+        [SerializeField] private List<string> _scene;
+        public List<string> Scenes => _scene;
     }
 }

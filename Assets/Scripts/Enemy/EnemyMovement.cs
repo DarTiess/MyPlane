@@ -1,69 +1,55 @@
-﻿using Data;
 using DG.Tweening;
-using GameEvents;
-using Player;
 using UnityEngine;
 
 namespace Enemy
 {
-    [RequireComponent(typeof(EnemyColor))]
     public class EnemyMovement : MonoBehaviour
     {
-        [SerializeField] private EnemyTrail enemyTrail;
-        private Transform player;
-        private float delay=1f;
-        private bool canMove;
-        private Vector3 targetLastPos;
-        private Tweener tween;
-        private EnemyColor enemyColor;
-
+        private bool _canMove;
+        private Vector3 _targetLastPos;
+        private Tweener _tween;
+        private Transform _player;
+        private float _delay=1f;
         private void FixedUpdate()
         {
-            if (canMove)
+            if (_canMove)
             {
                 Move();
             } 
         }
-        public void Init(IGameEvents gameEvents, PlayerMove playerMove, EnemySetting settings)
-        {
-            gameEvents.Gaming += PlayGame;
-            gameEvents.Fail += StopGame;
-            gameEvents.Pause += StopGame;
-            enemyColor = GetComponent<EnemyColor>();
-            
-            
-            enemyColor.SetEnemyColor(settings.color);
-            enemyTrail.SetTrailsSettings(settings.color);
 
-            delay = settings.delay;
-            player = playerMove.transform;
+        public void Init(Transform player, float delay)
+        {
+            _delay = delay;
+            _player = player;
         }
         private void Move()
         {
-            if (targetLastPos == player.position) 
+            if (_targetLastPos == _player.position) 
                 return;
 
-            delay = Vector3.Distance(transform.position, player.position);
-            tween.ChangeEndValue(player.position, true).Restart();
-            targetLastPos = player.position;
+            _delay = Vector3.Distance(transform.position, _player.position);
+            _tween.ChangeEndValue(_player.position, true).Restart();
+            _targetLastPos = _player.position;
             RotateToPlayer();
         }
         private void RotateToPlayer()
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, player.transform.rotation, Time.fixedDeltaTime * 8f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, _player.transform.rotation, Time.fixedDeltaTime * 8f);
         }
-        private void PlayGame()
+        public void PlayGame()
         {
-            canMove = true;
-            tween.Play();
-            tween = transform.DOMove(player.position,delay/2).SetUpdate(UpdateType.Fixed).SetAutoKill(false);
+            _canMove = true;
+            _tween.Play();
+            _tween = transform.DOMove(_player.position,_delay/2).SetUpdate(UpdateType.Fixed).SetAutoKill(false);
        
-            targetLastPos = player.position;
+            _targetLastPos = _player.position;
         }
-        private void StopGame()
+        public void StopGame()
         {
-            canMove = false;
-            tween.Pause();
+            _canMove = false;
+            _tween.Pause();
         }
+
     }
 }

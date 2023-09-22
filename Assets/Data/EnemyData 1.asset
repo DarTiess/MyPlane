@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c49be1e1a648a5bce0eeacd99d4e44, type: 3}
   m_Name: EnemyData 1
   m_EditorClassIdentifier: 
-  color: {r: 0.9528302, g: 0.049439307, b: 0.049439307, a: 1}
-  delay: 2
+  _color: {r: 0.9622642, g: 0.049928807, b: 0.049928807, a: 1}
+  _delay: 2

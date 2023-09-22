@@ -2,11 +2,10 @@
 {
     public interface IGameState
     {
-        void PlayGame();
-        void FailGame();
-        void TakeDamage();
-        void RestartGame();
-        void PauseGame();
-        void QuiteGame();
+        void OnPlayGame();
+       
+        void OnRestartGame();
+        void OnPauseGame();
+        void OnQuiteGame();
     }
 }

@@ -1,6 +1,4 @@
-﻿using Data;
-using DG.Tweening;
-using GameEvents;
+﻿using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -8,52 +6,24 @@ namespace UI
 {
     public class Health: MonoBehaviour
       {
-          [SerializeField] private TextMeshProUGUI countLifes;
-          [SerializeField] private int lifesOnStart = 12;
-          private IGameState gameState;
-          private IDataSaver dataSaver;
-          private int lifes;
-   
-          public void Init(IGameEvents gameEvents, IGameState gameStates, IDataSaver dataSavers)
+          [SerializeField] private TextMeshProUGUI _countLifes;
+         
+          public void Init(int lifes)
           {
-              gameState = gameStates;
-              gameEvents.TakeDamage += DisplayDamage;
-              dataSaver = dataSavers;
-             
-              SetLifesCountText();
+              SetLifesCountText(lifes);
           }
-          private void SetLifesCountText()
+
+          private void SetLifesCountText(int value)
           {
-              lifes = dataSaver.Lifes;
-              if (lifes <= 0)
-              {
-                  lifes = lifesOnStart;
-                  dataSaver.Lifes = lifes;
-              }
-              else
-              {
-                  lifesOnStart = lifes;
-              }
-              countLifes.text = lifesOnStart.ToString();
+              _countLifes.text = value.ToString();
           }
-          private void DisplayDamage()
+          public void DisplayDamage(int value)
           {
-              if (lifesOnStart <= 0)
-              {
-                  return;
-              }
-              lifesOnStart-=1;
-              lifes = lifesOnStart;
-              dataSaver.Lifes = lifes;
-              countLifes.text = lifesOnStart.ToString();
-              countLifes.transform.DOScale(1.5f, 0.5f)
+              _countLifes.text = value.ToString();
+              _countLifes.transform.DOScale(1.5f, 0.5f)
                         .OnComplete(() => {
-                            countLifes.transform.DOScale(1f, 0.5f);
+                            _countLifes.transform.DOScale(1f, 0.5f);
                         });
-              if (lifesOnStart <= 0)
-              {
-                  gameState.FailGame();
-              }
           }
       }
 }

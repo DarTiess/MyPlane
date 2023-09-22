@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Configs;
 using Data;
 using UnityEngine.SceneManagement;
 
@@ -6,32 +7,35 @@ namespace Infrastructure
 {
     public class SceneLoader 
     {
-        private IDataSaver dataSaver;
-        private List<string> scenes=new List<string>();
-        public SceneLoader(IDataSaver dataSaver, SceneSettings settings)
+        private IChangeScene _sceneData;
+        private List<string> _scenes=new List<string>();
+        private int _currentScene;
+        public SceneLoader(IChangeScene sceneData, SceneSettings settings)
         {
-            this.dataSaver = dataSaver;
-            foreach (string scene in settings.scenes)
+            _sceneData = sceneData;
+            foreach (string scene in settings.Scenes)
             {
-                scenes.Add(scene);
+                _scenes.Add(scene);
             }
-        }
-        public void StartLevel()
-        {
-            if (dataSaver.CurrentScene == 0) dataSaver.CurrentScene = 1;
-            LoadScene();
         }
         public void LoadNextLevel()
         {
-            dataSaver.CurrentScene += 1;
+            _currentScene += 1;
+            _sceneData.ChangeCurrentScene(_currentScene);
        
             LoadScene();
         }
-        public void LoadScene()
+
+        private void LoadScene()
         {
-            if (dataSaver.CurrentScene == 0) dataSaver.CurrentScene = 1;
-            int loadedScene = dataSaver.CurrentScene;
-            if (loadedScene <= scenes.Count) 
+            int sceneNumber = _sceneData.GetCurrentScene();
+            if (sceneNumber == 0)
+            {
+                _currentScene = 1;
+                _sceneData.ChangeCurrentScene(_currentScene);
+            }
+            int loadedScene = sceneNumber;
+            if (loadedScene <= _scenes.Count) 
             { 
                 loadedScene -= 1;
             }
@@ -39,7 +43,7 @@ namespace Infrastructure
             {
                 loadedScene = 0;
             }
-            SceneManager.LoadScene(scenes[loadedScene]);
+            SceneManager.LoadScene(_scenes[loadedScene]);
         }
         public void RestartScene()
         {

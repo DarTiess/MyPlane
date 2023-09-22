@@ -1,4 +1,5 @@
 ﻿using System;
+using Data;
 using Infrastructure;
 using UnityEngine;
 
@@ -6,48 +7,42 @@ namespace GameEvents
 {
     public class GameStateEvents : IGameEvents, IGameState
     {
+        private SceneLoader _sceneLoader;
+        private IGameOver _gameOver;
+
         public event Action Starting;
         public event Action Gaming;
         public event Action Pause;
         public event Action Fail;
-        public event Action TakeDamage;
 
-        private SceneLoader sceneLoader;
-        public void Init(SceneLoader loader)
+        public void Init(SceneLoader loader, IGameOver gameOver)
         {
-            sceneLoader = loader;
+            _sceneLoader = loader;
+            _gameOver = gameOver;
+            _gameOver.PlayerDied += OnFailGame;
         }
-        public void StartGame()
+        public void OnStartGame()
         {
             Starting?.Invoke();
         }
-        public void PlayGame()
+        public void OnPlayGame()
         {
             Gaming?.Invoke();
         }
-        public void FailGame()
+        private void OnFailGame()
         {
             Fail?.Invoke();
         }
-        void IGameState.TakeDamage()
-        {
-            TakeDamage?.Invoke();
-        }
-
-        public void PauseGame()
+        public void OnPauseGame()
         {
             Pause?.Invoke();
         }
-        public void RestartGame()
+        public void OnRestartGame()
         {
-            sceneLoader.RestartScene();
-        }
-        public void NextLevel()
-        {
-             sceneLoader.LoadNextLevel();
+            _sceneLoader.RestartScene();
         }
 
-        public void QuiteGame()
+        public void OnQuiteGame()
         {
             Application.Quit();
         }

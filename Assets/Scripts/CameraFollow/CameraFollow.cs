@@ -1,26 +1,26 @@
-﻿using Player;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CameraFollow
 {
     public class CameraFollow : MonoBehaviour
     {
-        private GameObject player;
+        private Transform _player;
 
-        public void Init(PlayerMove playerMove)
+        public void Init(Transform player)
         {
-            player = playerMove.gameObject;
+            _player = player;
         }
 
         private void LateUpdate()
         {
-            if(player==null)
+            if(_player==null)
             {
                 return;
             }
 
-            transform.position = new Vector3(player.transform.position.x,
-                                             player.transform.position.y, transform.position.z);
+            transform.position = new Vector3(_player.position.x,
+                                             _player.position.y, 
+                                             transform.position.z);
         }
     }
 }

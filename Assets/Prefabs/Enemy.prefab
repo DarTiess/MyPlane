@@ -237,7 +237,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 51e17a17472512744ab8996d043b176c, type: 3}
-  m_Color: {r: 0.9528302, g: 0.12135102, b: 0.12135102, a: 1}
+  m_Color: {r: 0.9529412, g: 0.15379108, b: 0.12156861, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -325,7 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f69f2ba7ed18813478360c8a5ac37a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyTrail: {fileID: 1281175375307757695}
+  _enemyTrail: {fileID: 1281175375307757695}
 --- !u!114 &7029904941855569948
 MonoBehaviour:
   m_ObjectHideFlags: 0

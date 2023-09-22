@@ -2,20 +2,7 @@ namespace Input
 {
     public class MobileInputService : InputService
     {
-       
-        public override float GetHorizontal { 
-       
-            get
-            {
-                return SimpleInput.GetAxis(HORIZONTAL);
-            }
-        }
-        public override float GetVertical
-        {
-            get
-            {
-                return SimpleInput.GetAxis(VERTICAL);
-            }
-        }
+        public override float GetHorizontal => SimpleInput.GetAxis(HORIZONTAL);
+        public override float GetVertical=> SimpleInput.GetAxis(VERTICAL);
     }
 }
