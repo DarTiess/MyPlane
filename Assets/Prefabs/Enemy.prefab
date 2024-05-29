@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4878688515246631380}
   - component: {fileID: 4878688515246631381}
-  - component: {fileID: 1281175375307757695}
   m_Layer: 0
   m_Name: Trail
   m_TagString: Untagged
@@ -148,18 +147,6 @@ TrailRenderer:
   m_MinVertexDistance: 0.01
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &1281175375307757695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4878688515246631383}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa6bf75145f04ac8a970946ed7f355ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4878688515714111929
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,7 +160,6 @@ GameObject:
   - component: {fileID: 4878688515714111924}
   - component: {fileID: 4878688515714111927}
   - component: {fileID: 4878688515714111926}
-  - component: {fileID: 7029904941855569948}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -325,16 +311,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f69f2ba7ed18813478360c8a5ac37a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyTrail: {fileID: 1281175375307757695}
---- !u!114 &7029904941855569948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4878688515714111929}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17bfc3814a8b47dcb597e16c3b03f7be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  trailRenderer: {fileID: 4878688515246631381}

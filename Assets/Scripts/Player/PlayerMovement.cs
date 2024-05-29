@@ -1,39 +1,30 @@
-using Configs;
 using Input;
 using UnityEngine;
 
 namespace Player
 {
-    [RequireComponent(typeof(Rigidbody2D))]
-    public class PlayerMovement : MonoBehaviour
+    
+    public class PlayerMovement
     {
         private float _playerSpeed; 
         private float _rotationSpeed;
         private IInputService _inputService;
-        private Rigidbody2D _rigidBody;
+        
         private Vector2 _temp;
-        private bool _canMove;
-        private void Start()
-        {
-            _rigidBody = GetComponent<Rigidbody2D>();
-        }
+        private Rigidbody2D _rigidBody;
+        private readonly Transform _parent;
 
-        private void FixedUpdate()
-        {
-            if(_canMove)
-            {
-                Move();
-            }
-        }
 
-        public void Init(IInputService inputService, PlayerConfigs config)
+        public PlayerMovement(IInputService inputService, PlayerSettings config, Rigidbody2D rigidbody)
         {
             _inputService = inputService;
             _playerSpeed = config.MoveSpeed;
             _rotationSpeed = config.RotationSpeed;
+            _rigidBody = rigidbody;
+            _parent = _rigidBody.transform;
         }
 
-        private void Move()
+        public void Move()
         {
             _temp.x = _inputService.GetHorizontal;
             _temp.y = _inputService.GetVertical;
@@ -48,17 +39,7 @@ namespace Player
         private void RotatePlayer()
         {
             float angle = Mathf.Atan2(_inputService.GetHorizontal, _inputService.GetVertical) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, 0f,-angle), Time.deltaTime * _rotationSpeed);
-        }
-
-        public void OnPlayGame()
-        {
-            _canMove = true;
-        }
-
-        public void OnPausedGame()
-        {
-            _canMove = false;
+            _parent.rotation = Quaternion.Lerp(_parent.rotation, Quaternion.Euler(0f, 0f,-angle), Time.deltaTime * _rotationSpeed);
         }
     }
 }

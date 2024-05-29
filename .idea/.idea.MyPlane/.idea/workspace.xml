@@ -7,6 +7,11 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Infrastructure/EventsBus/EventBus.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Infrastructure/Installers/SettingsInstellers/EnemiesSettingsInstaller.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Infrastructure/Installers/SettingsInstellers/ScenesSettingsInstaller.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -82,6 +87,9 @@
       <workItem from="1683040884237" duration="771000" />
       <workItem from="1695230001261" duration="632000" />
       <workItem from="1695381787194" duration="9890000" />
+      <workItem from="1710755622978" duration="23000" />
+      <workItem from="1716963989877" duration="477000" />
+      <workItem from="1716964478788" duration="16177000" />
     </task>
     <servers />
   </component>

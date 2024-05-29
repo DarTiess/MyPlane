@@ -1,53 +1,42 @@
 using System.Collections.Generic;
-using Configs;
-using Data;
+using Infrastructure.Level.EventsBus;
 using UnityEngine.SceneManagement;
 
 namespace Infrastructure
 {
     public class SceneLoader 
     {
-        private IChangeScene _sceneData;
         private List<string> _scenes=new List<string>();
         private int _currentScene;
-        public SceneLoader(IChangeScene sceneData, SceneSettings settings)
+        private readonly IEventBus _event;
+
+        public SceneLoader(IEventBus eventBus, ScenesSettings settings)
         {
-            _sceneData = sceneData;
+            _event=eventBus;
+            _event.Subscribe<RestartLevel>(RestartLevel);
+            _event.Subscribe<NextLevel>(LoadNextLevel);
             foreach (string scene in settings.Scenes)
             {
                 _scenes.Add(scene);
             }
         }
-        public void LoadNextLevel()
+        private void LoadNextLevel(NextLevel obj)
         {
             _currentScene += 1;
-            _sceneData.ChangeCurrentScene(_currentScene);
-       
             LoadScene();
         }
-
+        private void RestartLevel(RestartLevel obj)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
         private void LoadScene()
         {
-            int sceneNumber = _sceneData.GetCurrentScene();
-            if (sceneNumber == 0)
-            {
-                _currentScene = 1;
-                _sceneData.ChangeCurrentScene(_currentScene);
-            }
-            int loadedScene = sceneNumber;
-            if (loadedScene <= _scenes.Count) 
-            { 
-                loadedScene -= 1;
-            }
-            else
+            int loadedScene = _currentScene;
+            if (loadedScene >= _scenes.Count) 
             {
                 loadedScene = 0;
             }
             SceneManager.LoadScene(_scenes[loadedScene]);
-        }
-        public void RestartScene()
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }

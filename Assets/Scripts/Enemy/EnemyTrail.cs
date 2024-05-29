@@ -2,13 +2,18 @@ using UnityEngine;
 
 namespace Enemy
 {
-    [RequireComponent(typeof(TrailRenderer))]
-    public class EnemyTrail : MonoBehaviour
+    public class EnemyTrail
     {
         private TrailRenderer _trailRenderer;
-        public void SetTrailsSettings(Color color)
+
+        public EnemyTrail(TrailRenderer trailRenderer, Color color)
         {
-            _trailRenderer = GetComponent<TrailRenderer>();
+            _trailRenderer = trailRenderer;
+            SetTrailsSettings(color);
+        }
+
+        private void SetTrailsSettings(Color color)
+        {
             float alpha = 1.0f;
             Gradient gradient = new Gradient();
             gradient.SetKeys(

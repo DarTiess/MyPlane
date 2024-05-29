@@ -3,45 +3,40 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public class EnemyMovement : MonoBehaviour
+    public class EnemyMovement 
     {
         private bool _canMove;
         private Vector3 _targetLastPos;
         private Tweener _tween;
         private Transform _player;
         private float _delay=1f;
-        private void FixedUpdate()
-        {
-            if (_canMove)
-            {
-                Move();
-            } 
-        }
+        private Transform _parent;
 
-        public void Init(Transform player, float delay)
+        public EnemyMovement(Transform player, float delay, Transform parent)
         {
             _delay = delay;
             _player = player;
+            _parent = parent;
         }
-        private void Move()
+        public void Move()
         {
             if (_targetLastPos == _player.position) 
                 return;
 
-            _delay = Vector3.Distance(transform.position, _player.position);
+            _delay = Vector3.Distance(_parent.position, _player.position);
             _tween.ChangeEndValue(_player.position, true).Restart();
             _targetLastPos = _player.position;
             RotateToPlayer();
         }
         private void RotateToPlayer()
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, _player.transform.rotation, Time.fixedDeltaTime * 8f);
+            _parent.rotation = Quaternion.Lerp(_parent.rotation, _player.transform.rotation, Time.fixedDeltaTime * 8f);
         }
         public void PlayGame()
         {
             _canMove = true;
             _tween.Play();
-            _tween = transform.DOMove(_player.position,_delay/2).SetUpdate(UpdateType.Fixed).SetAutoKill(false);
+            _tween = _parent.DOMove(_player.position,_delay/2).SetUpdate(UpdateType.Fixed).SetAutoKill(false);
        
             _targetLastPos = _player.position;
         }

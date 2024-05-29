@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace Enemy
 {
-    [RequireComponent(typeof(SpriteRenderer))]
-    public class EnemyColor: MonoBehaviour
+    public class EnemyColor
     {
         private SpriteRenderer _renderer;
-        public void SetEnemyColor(Color color)
+
+        public EnemyColor(SpriteRenderer renderer, Color color)
         {
-            _renderer = GetComponent<SpriteRenderer>();
+            _renderer = renderer;
             _renderer.color = color;
         }
     }
